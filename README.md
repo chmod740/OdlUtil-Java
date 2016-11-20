@@ -4,5 +4,7 @@
 # Python3 版本见[https://github.com/imu-hupeng/odl_demo](https://github.com/imu-hupeng/odl_demo)
 Author：胡鹏(hupeng@imudges.com)
 # 目前的进度：
-### 1.完成了用户的认证以及Cookie的获取
+### 1.完成了用户的认证的实现,采用了Basic Auth的认证方式
 ### 2.完成了拓扑结构的获取，还没对获取的结果进行分析
+### 3.完成了主机信息的获取
+### 4.下一步会完成流表的下发
