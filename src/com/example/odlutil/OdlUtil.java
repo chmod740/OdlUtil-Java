@@ -72,7 +72,7 @@ public class OdlUtil {
     }
 
 
-    public String installFlow(Flow flow,String flowName){
+    public String installFlow(Flow flow){
         String json  = new Gson().toJson(flow);
         Map<String,String >headers = new HashMap<>();
         headers.put("Accept","application/json'");

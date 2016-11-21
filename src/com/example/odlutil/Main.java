@@ -22,6 +22,6 @@ public class Main {
         flow.setActions(actions);
         flow.setNwSrc("10.0.0.1");
         flow.setNwDst("10.0.0.3");
-        odlUtil.installFlow(flow,"111");
+        odlUtil.installFlow(flow);
     }
 }
