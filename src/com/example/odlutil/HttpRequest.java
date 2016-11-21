@@ -1,15 +1,16 @@
 package com.example.odlutil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
 public class HttpRequest {
+
+
 
     private static String basicAuth = null;
 
@@ -168,5 +169,41 @@ public class HttpRequest {
             }
         }
         return result;
+    }
+
+
+    public static String sendPut(String postUrl,Map<String, String> postHeaders,String postEntity) throws Exception {
+        postHeaders.put("Authorization",basicAuth);
+        URL postURL = new URL(postUrl);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) postURL.openConnection();
+        httpURLConnection.setDoOutput(true);
+        httpURLConnection.setDoInput(true);
+        httpURLConnection.setRequestMethod("PUT");
+        httpURLConnection.setUseCaches(false);
+        httpURLConnection.setInstanceFollowRedirects(true);
+        //application/json x-www-form-urlencoded
+        //httpURLConnection.setRequestProperty("Content-Type",  "application/x-www-form-urlencoded");//表单上传的模式
+        httpURLConnection.setRequestProperty("Content-Type",  "application/json;charset=utf-8");//json格式上传的模式
+        StringBuilder sbStr = new StringBuilder();
+        if(postHeaders != null) {
+            for(String pKey : postHeaders.keySet()) {
+                httpURLConnection.setRequestProperty(pKey, postHeaders.get(pKey));
+            }
+        }
+        if(postEntity != null) {
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(httpURLConnection.getOutputStream(),"utf-8"));
+            out.println(postEntity);
+            out.close();
+            BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection
+                    .getInputStream()));
+
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                sbStr.append(inputLine);
+            }
+            in.close();
+        }
+        httpURLConnection.disconnect();
+        return new String(sbStr.toString().getBytes(),"utf-8");
     }
 }

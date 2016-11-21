@@ -1,6 +1,10 @@
 package com.example.odlutil;
 
+import com.google.gson.Gson;
+
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by hupeng on 16-11-15.
@@ -24,6 +28,7 @@ public class OdlUtil {
         this.username = username;
         this.password = password;
         this.containerName = containerName;
+        HttpRequest.setBasicAuth(getBasicAuthStr(username,password));
     }
 
     /**
@@ -38,15 +43,16 @@ public class OdlUtil {
         this.username = username;
         this.password = password;
         this.containerName = "default";
+        HttpRequest.setBasicAuth(getBasicAuthStr(username,password));
     }
 
     /**
      * 获取拓扑信息
      * */
     public String getTopology(){
-        HttpRequest.setBasicAuth(getBasicAuthStr(username,password));
+
         String str = HttpRequest.sendGet(url + "/controller/nb/v2/topology/" + containerName,"");
-        //System.out.print(str);
+        System.out.print(str);
         return str;
     }
 
@@ -56,13 +62,29 @@ public class OdlUtil {
      * 获取主机信息
      * */
     public String getHosts(){
-        HttpRequest.setBasicAuth(getBasicAuthStr(this.username,this.password));
+
         ///controller/nb/v2/topology/' + str(container_name)
         String str = HttpRequest.sendGet(url + "/controller/nb/v2/topology/" + containerName,"");
 
         System.out.println(str);
 
         return str;
+    }
+
+
+    public String installFlow(Flow flow,String flowName){
+        String json  = new Gson().toJson(flow);
+        Map<String,String >headers = new HashMap<>();
+        headers.put("Accept","application/json'");
+        headers.put("Content-type","application/json");
+        try {
+            String str = HttpRequest.sendPut(url + "/controller/nb/v2/flowprogrammer/" + containerName + "/node/OF/" + flow.getNode().getId() + "/staticFlow/" + flow.getName(),headers,json);
+            System.out.println(str);
+            return str;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
