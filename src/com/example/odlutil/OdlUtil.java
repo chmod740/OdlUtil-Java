@@ -71,7 +71,9 @@ public class OdlUtil {
         return str;
     }
 
-
+    /**
+     * 下发流表
+     * */
     public String installFlow(Flow flow){
         String json  = new Gson().toJson(flow);
         Map<String,String >headers = new HashMap<>();
